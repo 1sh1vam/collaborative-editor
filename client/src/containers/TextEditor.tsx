@@ -5,6 +5,7 @@ import Delta from 'quill/node_modules/quill-delta/dist/Delta';
 import 'quill/dist/quill.snow.css';
 import 'highlight.js/styles/monokai-sublime.css';
 import { io, Socket } from 'socket.io-client';
+import { useParams } from 'react-router-dom';
 
 var TOOLBAR_OPTIONS = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -33,6 +34,7 @@ interface MountedRef {
 }
 
 const TextEditor = () => {
+  const { id: documentId } = useParams();
   const [socket, setSocket] = useState<Socket>();
   const [quill, setQuill] = useState<Quill>();
   const mountedref = useRef<MountedRef>({ socket: false, quill: false });
@@ -46,6 +48,17 @@ const TextEditor = () => {
       s.disconnect();
     }
   }, []);
+
+  useEffect(() => {
+    if (!socket || !quill) return;
+
+    socket.once('load-document', (data) => {
+      quill.setContents(data);
+      quill.enable();
+    });
+
+    socket.emit('get-document', documentId)
+  }, [socket, quill, documentId])
 
   useEffect(() => {
     if (!socket || !quill) return;
@@ -91,7 +104,8 @@ const TextEditor = () => {
         toolbar: TOOLBAR_OPTIONS,
       }
     });
-
+    q.disable();
+    q.setText('Loading...');
     setQuill(q);
   }, []);
 
