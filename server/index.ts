@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import { Editor } from './models/editor';
 
 const io = new Server(3001, {
     cors: {
@@ -9,7 +10,8 @@ const io = new Server(3001, {
 
 io.on('connection', (socket) => {
     console.log('connected');
-    socket.on('get-document', (documentId) => {
+    socket.on('get-document', async (documentId) => {
+        const document = await findOrCreate(documentId);
         const data = "";
         socket.join(documentId);
         socket.emit('load-document', data);
@@ -19,3 +21,17 @@ io.on('connection', (socket) => {
         });
     });
 });
+
+const findOrCreate = async (id: string) => {
+    if (!id) return;
+
+    const document = await Editor.findById(id);
+
+    const newDocument = await Editor.build({
+        _id: id,
+        data: "",
+    });
+
+    newDocument.save();
+    return newDocument;
+}
