@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import hljs from 'highlight.js';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import { io } from 'socket.io-client';
+import 'highlight.js/styles/monokai-sublime.css';
+import { io, Socket } from 'socket.io-client';
 
 var TOOLBAR_OPTIONS = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -20,15 +22,24 @@ var TOOLBAR_OPTIONS = [
   ['clean']                                         // remove formatting button
 ];
 
+hljs.configure({   // optionally configure hljs
+  languages: ['javascript', 'ruby', 'python']
+});
 
 const TextEditor = () => {
+  const [scoket, setSocket] = useState<Socket>();
+  const [quill, setQuill] = useState();
   const mountedref = useRef(false);
 
   useEffect(() => {
     if (mountedref.current) return;
     mountedref.current = true;
-    const socket = io('http://localhost:3001');
-    console.log('socket', socket);
+    const s = io('http://localhost:3001');
+    setSocket(s);
+
+    return () => {
+      s.disconnect();
+    }
   }, [])
 
   const wrapperRef = useCallback((wrapper: HTMLDivElement) => {
@@ -40,6 +51,9 @@ const TextEditor = () => {
     new Quill(element, {
       theme: 'snow',
       modules: {
+        syntax: {
+          highlight: (text: string) => hljs.highlightAuto(text).value,
+        },
         toolbar: TOOLBAR_OPTIONS,
       }
     });
