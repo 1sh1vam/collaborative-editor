@@ -9,4 +9,8 @@ const io = new Server(3001, {
 
 io.on('connection', (socket) => {
     console.log('connected');
+
+    socket.on('send-changes', (delta) => {
+        console.log(delta);
+    })
 });
