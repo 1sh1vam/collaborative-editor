@@ -24,6 +24,8 @@ var TOOLBAR_OPTIONS = [
   ['clean']                                         // remove formatting button
 ];
 
+const SAVE_INTERVAL_MS = 3000;
+
 hljs.configure({   // optionally configure hljs
   languages: ['javascript', 'ruby', 'python']
 });
@@ -59,6 +61,18 @@ const TextEditor = () => {
 
     socket.emit('get-document', documentId)
   }, [socket, quill, documentId])
+
+  useEffect(() => {
+    if (!socket || !quill) return;
+
+    const interval = setInterval(() => {
+      socket.emit('save-document', quill.getContents());
+    }, SAVE_INTERVAL_MS);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [socket, quill])
 
   useEffect(() => {
     if (!socket || !quill) return;
