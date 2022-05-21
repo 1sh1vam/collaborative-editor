@@ -13,6 +13,7 @@ const TextEditor = () => {
       theme: 'snow',
     });
   }, []);
+
   return <div ref={wrapperRef} className="container"></div>;
 };
 
