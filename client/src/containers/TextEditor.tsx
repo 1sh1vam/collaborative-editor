@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js';
 import Quill from 'quill';
+import Delta from 'quill/node_modules/quill-delta/dist/Delta';
 import 'quill/dist/quill.snow.css';
 import 'highlight.js/styles/monokai-sublime.css';
 import { io, Socket } from 'socket.io-client';
@@ -26,21 +27,40 @@ hljs.configure({   // optionally configure hljs
   languages: ['javascript', 'ruby', 'python']
 });
 
+interface MountedRef {
+  socket?: boolean;
+  quill?: boolean;
+}
+
 const TextEditor = () => {
-  const [scoket, setSocket] = useState<Socket>();
-  const [quill, setQuill] = useState();
-  const mountedref = useRef(false);
+  const [socket, setSocket] = useState<Socket>();
+  const [quill, setQuill] = useState<Quill>();
+  const mountedref = useRef<MountedRef>({ socket: false, quill: false });
+
 
   useEffect(() => {
-    if (mountedref.current) return;
-    mountedref.current = true;
     const s = io('http://localhost:3001');
     setSocket(s);
 
     return () => {
       s.disconnect();
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (!socket || !quill) return;
+
+    const handler = (delta: Delta, oldDelta: Delta, source: string) => {
+      if (source !== 'user') return;
+      socket.emit('send-changes', delta);
+    }
+
+    quill.on('text-change', handler);
+
+    return () => {
+      quill.off('text-change', handler);
+    }
+  }, [socket, quill])
 
   const wrapperRef = useCallback((wrapper: HTMLDivElement) => {
     if (!wrapper) return;
@@ -48,7 +68,7 @@ const TextEditor = () => {
     const element = document.createElement('div');
     wrapper.append(element);
 
-    new Quill(element, {
+    const q = new Quill(element, {
       theme: 'snow',
       modules: {
         syntax: {
@@ -57,6 +77,8 @@ const TextEditor = () => {
         toolbar: TOOLBAR_OPTIONS,
       }
     });
+
+    setQuill(q);
   }, []);
 
   return <div ref={wrapperRef} className="container"></div>;
