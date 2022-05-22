@@ -10,7 +10,10 @@ const DocsContainer = () => {
                 </div>
             </div>
             <div className="docs-items-container">
+                <p className="doc-items-title">Documents</p>
+                <div className="doc-items">
 
+                </div>
             </div>
         </div>
     )
