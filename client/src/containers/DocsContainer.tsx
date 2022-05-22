@@ -9,8 +9,8 @@ const DocsContainer = () => {
                     </div>
                 </div>
             </div>
-            <div className="docs-items-containers">
-                <div className=""></div>
+            <div className="docs-items-container">
+
             </div>
         </div>
     )
