@@ -116,6 +116,21 @@ body {
 .doc-items {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 1.5rem;
+}
+
+.doc-list {
+    display: flex;
+    min-width: 150px;
+    padding: 0rem 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    border: 1px solid #dfe1e5;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.doc-list img {
+    width: 24px;
 }

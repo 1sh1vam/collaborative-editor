@@ -1,4 +1,7 @@
+import DocList from "../components/DocList";
+
 const DocsContainer = () => {
+    const names = ['First Doc', 'Hello there', 'Untitled']
     return (
         <div className="docs-container">
             <div className="docs-top">
@@ -12,7 +15,7 @@ const DocsContainer = () => {
             <div className="docs-items-container">
                 <p className="doc-items-title">Documents</p>
                 <div className="doc-items">
-
+                    {names.map((name) => <DocList name={name} />)}
                 </div>
             </div>
         </div>
