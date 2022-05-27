@@ -1,6 +1,5 @@
 import TextEditor from "./containers/TextEditor";
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DocsContainer from "./containers/DocsContainer";
 import Header from "./containers/Header";
 
