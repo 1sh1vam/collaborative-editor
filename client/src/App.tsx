@@ -7,8 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/" element={<Navigate to={`/documents/${uuidv4()}`} />} />
-        <Route path="/documents/:id" element={<TextEditor />} /> */}
+        <Route path="/documents/:id" element={<TextEditor />} />
         <Route path="/" element={<DocsContainer />} />
       </Routes>
     </Router>
