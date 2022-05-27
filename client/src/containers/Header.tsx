@@ -18,11 +18,14 @@ const Header = () => {
 const FilenameInp = () => {
     const [name, setName] = useState('');
     return (
-        <input
-            className="file-name-input"
-            onChange={({ target }) => setName(target.value)}
-            value={name}
-        />
+        <div className="file-input-container">
+            <div className="hidden-file-name">{name}</div>
+            <input
+                className="file-name-input"
+                onChange={({ target }) => setName(target.value)}
+                value={name}
+            />
+        </div>
     )
 }
 
