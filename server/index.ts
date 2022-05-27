@@ -1,46 +1,30 @@
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
-import { Editor } from './models/editor';
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import { handleSocket } from './routes/web-socket';
 
 
 mongoose.connect('mongodb://localhost/google-docs');
 
-const io = new Server(3001, {
+const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST']
+}))
+const server = http.createServer(app);
+
+const io = new Server(server, {
     cors: {
         origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST']
     }
 });
 
-io.on('connection', (socket) => {
-    console.log('connected');
-    socket.on('get-document', async (documentId) => {
-        const document = await findOrCreate(documentId);
-        socket.join(documentId);
-        socket.emit('load-document', document!.data);
+io.on('connection', handleSocket);
 
-        socket.on('send-changes', async (delta) => {
-            socket.broadcast.to(documentId).emit('receive-changes', delta);
-        });
 
-        socket.on('save-document', async (data) => {
-            const editor = await Editor.findById(documentId);
-            await Editor.findByIdAndUpdate(documentId, { data });
-        });
-    });
+server.listen(3001, () => {
+    console.log('listening on port 3001');
 });
-
-const findOrCreate = async (id: string) => {
-    if (!id) return;
-
-    const document = await Editor.findById(id);
-    if (document) return document;
-
-    const newDocument = Editor.build({
-        _id: id,
-        data: "",
-    });
-
-    await newDocument.save();
-    return newDocument;
-}
