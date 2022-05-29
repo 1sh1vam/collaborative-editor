@@ -1,19 +1,13 @@
 import mongoose from "mongoose";
 
-interface UserDoc {
-    email: string;
-    name: string;
-    id: string;
-}
-
 interface EditorAttrs {
     data: any;
-    owner: UserDoc;
+    owner: string;
 }
 
 interface EditorDoc extends mongoose.Document {
     data: any;
-    owner: UserDoc;
+    owner: string;
 }
 
 interface EditorModel extends mongoose.Model<EditorDoc> {
