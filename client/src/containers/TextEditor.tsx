@@ -59,6 +59,10 @@ const TextEditor = () => {
       quill.enable();
     });
 
+    socket.once('error', (err) => {
+      quill.setContents(err.message);
+    });
+
     socket.emit('get-document', documentId)
   }, [socket, quill, documentId])
 
