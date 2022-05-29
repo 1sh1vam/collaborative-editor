@@ -1,14 +1,24 @@
 import React from "react";
 import DocList from "../components/DocList";
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
+import useRequest from "../hooks/use-request";
+
+interface DocCreateData {
+    id: string;
+}
 
 const DocsContainer = () => {
     const names = ['First Doc', 'Hello there', 'Untitled']
     const navigate = useNavigate();
+    const { status, sendRequest } = useRequest();
+
+
     const handleNewDoc = (e: React.SyntheticEvent) => {
-        navigate(`/documents/${uuidv4()}`)
+        sendRequest({ apiRoute: '/api/docs', method: 'post', body: {}, onSuccess: (data: DocCreateData) => {
+            navigate(`/documents/${data.id}`)
+        } });
     }
+    console.log('status', status);
     return (
         <div className="docs-container">
             <div className="docs-top">
