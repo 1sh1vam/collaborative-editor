@@ -13,7 +13,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST']
 }));
-console.log('env', process.env.NODE_ENV)
+
 app.use(cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'dev',
@@ -44,3 +44,5 @@ const start = async () => {
         console.log('failed to start server', err);
     }
 }
+
+start();
