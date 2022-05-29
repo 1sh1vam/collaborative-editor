@@ -31,3 +31,5 @@ app.get('/api/docs', currentUser, async (req: Request, res: Response) => {
 
     res.send(docs);
 });
+
+export { app as editorRoute }

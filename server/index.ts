@@ -6,6 +6,7 @@ import http from 'http';
 import cookieSession from 'cookie-session';
 import { handleSocket } from './routes/web-socket';
 import { userRouter } from './routes/user';
+import { editorRoute } from './routes/docs';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieSession({
 }));
 
 app.use(userRouter);
+app.use(editorRoute);
 
 app.all('*', (req: Request, res: Response) => {
     res.status(404).send({ message: 'Not Found' });
