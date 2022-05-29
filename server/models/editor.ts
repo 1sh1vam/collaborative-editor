@@ -1,12 +1,19 @@
 import mongoose from "mongoose";
 
+interface UserDoc {
+    email: string;
+    name: string;
+    id: string;
+}
+
 interface EditorAttrs {
-    _id: string,
     data: any;
+    owner: UserDoc;
 }
 
 interface EditorDoc extends mongoose.Document {
     data: any;
+    owner: UserDoc;
 }
 
 interface EditorModel extends mongoose.Model<EditorDoc> {
@@ -14,12 +21,13 @@ interface EditorModel extends mongoose.Model<EditorDoc> {
 }
 
 const editor = new mongoose.Schema({
-    _id: {
-        type: String,
-        required: true,
-    },
     data: {
         type: Object
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
     }
 });
 
