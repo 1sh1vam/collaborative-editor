@@ -6,8 +6,6 @@ import http from 'http';
 import cookieSession from 'cookie-session';
 import { handleSocket } from './routes/web-socket';
 
-mongoose.connect('mongodb://localhost/google-docs');
-
 const app = express();
 
 app.use(express.json());
@@ -32,7 +30,17 @@ const io = new Server(server, {
 
 io.on('connection', handleSocket);
 
+const start = async () => {
+    try {
+        if (!process.env.MONGO_URI) {
+            throw new Error('Mongo url is required');
+        }
+        await mongoose.connect(process.env.MONGO_URI);
 
-server.listen(3001, () => {
-    console.log('listening on port 3001');
-});
+        server.listen(3001, () => {
+            console.log('listening on port 3001');
+        });
+    } catch(err) {
+        console.log('failed to start server', err);
+    }
+}
