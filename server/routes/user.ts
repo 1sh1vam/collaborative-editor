@@ -43,6 +43,7 @@ app.post(
       {
         id: user.id,
         email: user.email,
+        name: user.name,
       },
       process.env.JWT_KEY!
     );
@@ -88,6 +89,7 @@ app.post(
       {
         id: existingUser.id,
         email: existingUser.email,
+        name: existingUser.name,
       },
       process.env.JWT_KEY!
     );
@@ -104,11 +106,7 @@ app.get('/api/users/currentUser', currentUser, async (req: Request, res: Respons
     return res.status(401).send({ message: 'Not authorized' });
   }
 
-  const { id } = req.currentUser;
-
-  const user = await User.findById(id);
-
-  res.send(user);
+  res.send({ currentUser: req.currentUser || null });
 });
 
 app.post('/api/users/signout', currentUser,  async (req: Request, res: Response) => {
@@ -116,5 +114,3 @@ app.post('/api/users/signout', currentUser,  async (req: Request, res: Response)
 
     res.send({});
 });
-
-
