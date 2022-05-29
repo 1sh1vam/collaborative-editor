@@ -114,3 +114,5 @@ app.post('/api/users/signout', currentUser,  async (req: Request, res: Response)
 
     res.send({});
 });
+
+export { app as userRouter }

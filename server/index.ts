@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import cookieSession from 'cookie-session';
 import { handleSocket } from './routes/web-socket';
+import { userRouter } from './routes/user';
 
 const app = express();
 
@@ -18,6 +19,12 @@ app.use(cookieSession({
     signed: false,
     secure: process.env.NODE_ENV !== 'dev',
 }));
+
+app.use(userRouter);
+
+app.all('*', (req: Request, res: Response) => {
+    res.status(404).send({ message: 'Not Found' });
+});
 
 const server = http.createServer(app);
 
