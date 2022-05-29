@@ -79,5 +79,13 @@ app.post('/api/users/signin', [
         return res.status(400).send({ message: 'Invalid credentials' });
     }
 
+    const userJwt = jwt.sign({
+        id: existingUser.id,
+        email: existingUser.email,
+    }, process.env.JWT_KEY!)
+
+    req.session = {
+        jwt: userJwt
+    }
     res.send(existingUser);
 })
