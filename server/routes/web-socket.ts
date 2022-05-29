@@ -23,10 +23,15 @@ const handleSocket =  async (socket: Socket) => {
 }
 
 const find = async (id: string) => {
-    if (!id) return;
+    try {
+        if (!id) return;
 
-    const document = await Editor.findById(id);
-    if (document) return document;
+        const document = await Editor.findById(id);
+        return document;
+    } catch(err) {
+        console.log('error ', err);
+        return;
+    }
 }
 
 export { handleSocket };
