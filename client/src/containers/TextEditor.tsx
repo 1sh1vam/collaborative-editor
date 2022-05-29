@@ -60,23 +60,12 @@ const TextEditor = () => {
     });
 
     socket.once('error', (err) => {
-      quill.setContents(err.message);
+      quill.setText(err.message);
     });
 
     socket.emit('get-document', documentId)
   }, [socket, quill, documentId])
 
-  useEffect(() => {
-    if (!socket || !quill) return;
-
-    const interval = setInterval(() => {
-      socket.emit('save-document', quill.getContents());
-    }, SAVE_INTERVAL_MS);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, [socket, quill])
 
   useEffect(() => {
     if (!socket || !quill) return;
@@ -98,6 +87,7 @@ const TextEditor = () => {
     const handler = (delta: Delta, oldDelta: Delta, source: string) => {
       if (source !== 'user') return;
       socket.emit('send-changes', delta);
+      socket.emit('save-document', quill.getContents());
     }
 
     quill.on('text-change', handler);
