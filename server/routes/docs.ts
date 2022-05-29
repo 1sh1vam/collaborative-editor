@@ -20,3 +20,14 @@ app.post('/api/docs', currentUser, async (req: Request, res: Response) => {
     res.status(201).send(editor);
 });
 
+app.get('/api/docs', currentUser, async (req: Request, res: Response) => {
+    if (!req.currentUser) {
+        return res.status(401).send({ message: 'Not authorized' });
+    }
+
+    const { id } = req.currentUser;
+
+    const docs = await Editor.find({ owner: id })
+
+    res.send(docs);
+});
