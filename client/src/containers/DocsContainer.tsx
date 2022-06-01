@@ -15,7 +15,6 @@ interface Docs {
 }
 
 const DocsContainer = () => {
-    const names = ['First Doc', 'Hello there', 'Untitled']
     const [docs, setDocs] = useState<Docs[]>([]);
     const navigate = useNavigate();
     const { status, sendRequest } = useRequest();
@@ -24,7 +23,7 @@ const DocsContainer = () => {
     useEffect(() => {
         if (!mountedRef.current) {
             mountedRef.current = true;
-            sendRequest({ apiRoute: '/api/docs', method: 'get', body: {}, onSuccess: (data: Docs[]) => {
+            sendRequest({ apiRoute: '/api/docs', from: 'getDocs', method: 'get', body: {}, onSuccess: (data: Docs[]) => {
                 setDocs(data)
             } });
         }
@@ -32,7 +31,7 @@ const DocsContainer = () => {
 
 
     const handleNewDoc = (e: React.SyntheticEvent) => {
-        sendRequest({ apiRoute: '/api/docs', method: 'post', body: {}, onSuccess: (data: DocCreateData) => {
+        sendRequest({ apiRoute: '/api/docs', from: 'newDoc', method: 'post', body: {}, onSuccess: (data: DocCreateData) => {
             navigate(`/documents/${data.id}`)
         } });
     }
@@ -45,11 +44,13 @@ const DocsContainer = () => {
                     <div className="new-doc" onClick={handleNewDoc}>
                         <img src="/assets/images/docs-blank-googlecolors.png" />
                     </div>
+                    {status.current === 'newDoc' && status.error && <p className="error-text">{status.message}</p>}
                 </div>
             </div>
             <div className="docs-items-container">
                 <p className="doc-items-title">Documents</p>
                 <div className="doc-items">
+                    {status.current === 'getDocs' && status.error && <p className="error-text">{status.message}</p>}
                     {docs.map((doc) => <DocList onClick={() => navigate(`/documents/${doc.id}`)} name={doc.name} />)}
                 </div>
             </div>
