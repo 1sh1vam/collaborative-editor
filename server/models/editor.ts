@@ -8,6 +8,7 @@ interface EditorAttrs {
 interface EditorDoc extends mongoose.Document {
     data: any;
     owner: string;
+    name: string;
 }
 
 interface EditorModel extends mongoose.Model<EditorDoc> {
@@ -22,6 +23,18 @@ const editor = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    name: {
+        type: String,
+    }
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.password;
+            delete ret.__v;
+        }
     }
 });
 
