@@ -7,10 +7,7 @@ interface Props<Body, CallbackParams> {
     from?: string;
     body?: Body;
     onSuccess?: (params: CallbackParams) => void;
-}
-
-interface FetchError {
-    message: string;
+    onError?: (params: {message: string, status?: number}) => void;
 }
 
 interface Status {
@@ -20,10 +17,14 @@ interface Status {
     message?: string;
 }
 
+interface FetchError {
+    message: string;
+}
+
 export default function useRequest() {
     const [status, setStauts] = useState<Status>({});
 
-    const sendRequest = async <Body, CallbackParams>({ apiRoute, from, method, body, onSuccess } : Props<Body, CallbackParams>) => {
+    const sendRequest = async <Body, CallbackParams>({ apiRoute, from, method, body, onSuccess, onError } : Props<Body, CallbackParams>) => {
         try {
             setStauts({ loading: true, current: from });
             const url = 'http://localhost:3001' + apiRoute;
@@ -35,10 +36,12 @@ export default function useRequest() {
         } catch(error) {
             let message = '';
             if (axios.isAxiosError(error)) {
-                const err = error.response?.data as FetchError;
-                message = err.message;
+                const err = error.response;
+                const { message } = err?.data as FetchError;
+                if (onError) onError({ message, status: err?.status });
             } else {
                 message = 'Something went wrong';
+                if (onError) onError({ message });
             }
             setStauts({ error: true, current: from,  message });
         }
