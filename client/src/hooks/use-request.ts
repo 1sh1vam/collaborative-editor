@@ -38,8 +38,8 @@ export default function useRequest() {
             let errObj = { error: true } as Status;
             if (axios.isAxiosError(error)) {
                 const err = error.response;
-                const { message } = err?.data as FetchError;
-                errObj = { ...errObj, message, status: err?.status }
+                const errData = err?.data as FetchError;
+                errObj = { ...errObj, message: errData?.message, status: err?.status }
             } else {
                 errObj.message = 'Something went wrong';
             }
