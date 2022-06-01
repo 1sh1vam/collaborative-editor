@@ -20,6 +20,24 @@ app.post('/api/docs', currentUser, async (req: Request, res: Response) => {
     res.status(201).send(editor);
 });
 
+app.patch('/api/docs', currentUser, async (req: Request, res: Response) => {
+    if (!req.currentUser) {
+        return res.status(401).send({ message: 'Not authorized' });
+    }
+
+    const { id } = req.currentUser;
+    const { name } = req.body;
+
+    const editor = await Editor.findOne({ owner: id }).exec();
+    if (!editor) {
+        return res.status(400).send({ message: 'Not found' });
+    }
+    editor.name = name;
+    await editor.save();
+
+    res.status(201).send(editor);
+});
+
 app.get('/api/docs', currentUser, async (req: Request, res: Response) => {
     if (!req.currentUser) {
         return res.status(401).send({ message: 'Not authorized' });
