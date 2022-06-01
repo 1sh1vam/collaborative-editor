@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Form, { FormBtn, FormInput } from '../components/Form';
 
 interface FormData {
@@ -13,7 +14,7 @@ export default function Signup() {
       e.preventDefault();
   }
   return (
-    <div className="signup-form">
+    <div className="signup-form form-container">
       <Form>
         <FormInput
           placeholder="Enter your name"
@@ -37,7 +38,10 @@ export default function Signup() {
             setForm((prev) => ({ ...prev, password: (target as HTMLInputElement).value }))
           }
         />
-        <FormBtn onClick={handleSubmit}>submit</FormBtn>
+        <div className='btn-container'>
+          <FormBtn onClick={handleSubmit}>submit</FormBtn>
+          <Link to="/signin">sign in</Link>
+        </div>
       </Form>
     </div>
   );
