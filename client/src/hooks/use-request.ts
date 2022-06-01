@@ -21,6 +21,13 @@ interface FetchError {
     message: string;
 }
 
+interface ErrorObj {
+    error: boolean,
+    current?: string,
+    message: string,
+    status?: number;
+}
+
 export default function useRequest() {
     const [status, setStauts] = useState<Status>({});
 
@@ -34,16 +41,16 @@ export default function useRequest() {
             setStauts({});
             return response;
         } catch(error) {
-            let message = '';
+            let errObj = { error: true, current: from, message: '' } as ErrorObj;
             if (axios.isAxiosError(error)) {
                 const err = error.response;
                 const { message } = err?.data as FetchError;
-                if (onError) onError({ message, status: err?.status });
+                errObj = { ...errObj, message, status: err?.status }
             } else {
-                message = 'Something went wrong';
-                if (onError) onError({ message });
+                errObj.message = 'Something went wrong';
             }
-            setStauts({ error: true, current: from,  message });
+            if (onError) onError(errObj);
+            setStauts({ error: true, current: from,  message: errObj.message });
         }
     }
 
