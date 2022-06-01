@@ -4,6 +4,7 @@ import axios from 'axios';
 interface Props<Body, CallbackParams> {
     apiRoute: string;
     method: 'get' | 'post';
+    from?: string;
     body?: Body;
     onSuccess?: (params: CallbackParams) => void;
 }
@@ -12,12 +13,19 @@ interface FetchError {
     message: string;
 }
 
-export default function useRequest() {
-    const [status, setStauts] = useState({});
+interface Status {
+    current?: string;
+    loading?: boolean;
+    error?: boolean;
+    message?: string;
+}
 
-    const sendRequest = async <Body, CallbackParams>({ apiRoute, method, body, onSuccess } : Props<Body, CallbackParams>) => {
+export default function useRequest() {
+    const [status, setStauts] = useState<Status>({});
+
+    const sendRequest = async <Body, CallbackParams>({ apiRoute, from, method, body, onSuccess } : Props<Body, CallbackParams>) => {
         try {
-            setStauts({ loading: true });
+            setStauts({ loading: true, current: from });
             const url = 'http://localhost:3001' + apiRoute;
             const response = await axios[method](url, body);
 
@@ -32,7 +40,7 @@ export default function useRequest() {
             } else {
                 message = 'Something went wrong';
             }
-            setStauts({ error: true, message });
+            setStauts({ error: true, current: from,  message });
         }
     }
 
