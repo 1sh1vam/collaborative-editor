@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Form, { FormBtn, FormInput } from '../components/Form';
 
 interface FormData {
@@ -9,9 +9,8 @@ interface FormData {
 
 export default function Signup() {
   const [form, setForm] = useState<FormData>({name: '', email: '', password: ''});
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
       e.preventDefault();
-
   }
   return (
     <div className="signup-form">
@@ -38,7 +37,7 @@ export default function Signup() {
             setForm((prev) => ({ ...prev, password: (target as HTMLInputElement).value }))
           }
         />
-        <FormBtn onClick={(e) => }>submit</FormBtn>
+        <FormBtn onClick={handleSubmit}>submit</FormBtn>
       </Form>
     </div>
   );
