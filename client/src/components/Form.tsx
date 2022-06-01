@@ -7,6 +7,7 @@ interface FunctionProps {
 interface InputProps {
     placeholder: string;
     value: string;
+    type?: string;
     onChange(e: React.SyntheticEvent): void;
 }
 
