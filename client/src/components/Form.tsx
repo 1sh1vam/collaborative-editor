@@ -12,7 +12,7 @@ interface InputProps {
 }
 
 interface BtnProps {
-    children: JSX.Element;
+    children: string;
     onClick(e: React.SyntheticEvent): void;
 }
 
