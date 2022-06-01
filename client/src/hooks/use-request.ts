@@ -19,7 +19,7 @@ interface Status {
 }
 
 interface FetchError {
-    message: string;
+    msg: string;
 }
 
 export default function useRequest() {
@@ -39,7 +39,8 @@ export default function useRequest() {
             if (axios.isAxiosError(error)) {
                 const err = error.response;
                 const errData = err?.data as FetchError;
-                errObj = { ...errObj, message: errData?.message, status: err?.status }
+                console.error('err data', errData, err)
+                errObj = { ...errObj, message: errData?.msg, status: err?.status }
             } else {
                 errObj.message = 'Something went wrong';
             }
