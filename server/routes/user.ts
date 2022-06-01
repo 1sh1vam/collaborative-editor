@@ -20,7 +20,7 @@ app.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send({ ...errors.array()[0] });
     }
 
     const { name, email, password } = req.body;
@@ -28,7 +28,7 @@ app.post(
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).send({ message: 'Email is use' });
+      return res.status(400).send({ msg: 'Email is use' });
     }
 
     const user = User.build({
@@ -73,7 +73,7 @@ app.post(
 
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return res.status(400).send({ message: 'Invalid credentials' });
+      return res.status(400).send({ msg: 'Invalid credentials' });
     }
 
     const passwordMatches = await Password.compare(
@@ -82,7 +82,7 @@ app.post(
     );
 
     if (!passwordMatches) {
-      return res.status(400).send({ message: 'Invalid credentials' });
+      return res.status(400).send({ msg: 'Invalid credentials' });
     }
 
     const userJwt = jwt.sign(
@@ -103,7 +103,7 @@ app.post(
 
 app.get('/api/users/currentUser', currentUser, async (req: Request, res: Response) => {
   if (!req.currentUser) {
-    return res.status(401).send({ message: 'Not authorized' });
+    return res.status(401).send({ msg: 'Not authorized' });
   }
 
   res.send({ currentUser: req.currentUser || null });

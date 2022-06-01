@@ -6,7 +6,7 @@ const app = express.Router();
 
 app.post('/api/docs', currentUser, async (req: Request, res: Response) => {
     if (!req.currentUser) {
-        return res.status(401).send({ message: 'Not authorized' });
+        return res.status(401).send({ msg: 'Not authorized' });
     }
 
     const { id } = req.currentUser;
@@ -22,7 +22,7 @@ app.post('/api/docs', currentUser, async (req: Request, res: Response) => {
 
 app.patch('/api/docs', currentUser, async (req: Request, res: Response) => {
     if (!req.currentUser) {
-        return res.status(401).send({ message: 'Not authorized' });
+        return res.status(401).send({ msg: 'Not authorized' });
     }
 
     const { id } = req.currentUser;
@@ -30,7 +30,7 @@ app.patch('/api/docs', currentUser, async (req: Request, res: Response) => {
 
     const editor = await Editor.findOne({ owner: id }).exec();
     if (!editor) {
-        return res.status(400).send({ message: 'Not found' });
+        return res.status(400).send({ msg: 'Not found' });
     }
     editor.name = name;
     await editor.save();
@@ -40,7 +40,7 @@ app.patch('/api/docs', currentUser, async (req: Request, res: Response) => {
 
 app.get('/api/docs', currentUser, async (req: Request, res: Response) => {
     if (!req.currentUser) {
-        return res.status(401).send({ message: 'Not authorized' });
+        return res.status(401).send({ msg: 'Not authorized' });
     }
 
     const { id } = req.currentUser;
