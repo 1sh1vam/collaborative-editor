@@ -7,7 +7,7 @@ interface Props<Body, CallbackParams> {
     from?: string;
     body?: Body;
     onSuccess?: (params: CallbackParams) => void;
-    onError?: (params: {message: string, status?: number}) => void;
+    onError?: (params: Status) => void;
 }
 
 interface Status {
@@ -15,17 +15,11 @@ interface Status {
     loading?: boolean;
     error?: boolean;
     message?: string;
+    status?: number;
 }
 
 interface FetchError {
     message: string;
-}
-
-interface ErrorObj {
-    error: boolean,
-    current?: string,
-    message: string,
-    status?: number;
 }
 
 export default function useRequest() {
@@ -41,7 +35,7 @@ export default function useRequest() {
             setStauts({});
             return response;
         } catch(error) {
-            let errObj = { error: true, current: from, message: '' } as ErrorObj;
+            let errObj = { error: true } as Status;
             if (axios.isAxiosError(error)) {
                 const err = error.response;
                 const { message } = err?.data as FetchError;
