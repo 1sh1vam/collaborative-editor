@@ -37,7 +37,7 @@ function App() {
         {status.loading && <Skeleton width={500} height={100} />}
         {!status.loading && (
           <Routes>
-            <Route path="/" element={status.error? <Navigate to="/signup" /> : <DocsContainer />} />
+            <Route path="/" element={(status.error && !currentUser.id)? <Navigate to="/signup" /> : <DocsContainer />} />
             <Route path="/documents/:id" element={<TextEditor />} />
             <Route path="/signup" element={<Signup setCurrentUser={setCurrentUser} />} />
           </Routes>
