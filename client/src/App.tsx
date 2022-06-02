@@ -7,7 +7,7 @@ import useRequest from "./hooks/use-request";
 import Signup from "./containers/Signup";
 import Skeleton from "react-loading-skeleton";
 
-interface UserDocs {
+export interface UserDocs {
   name: string;
   email: string;
   id: string;
@@ -24,23 +24,22 @@ function App() {
         apiRoute: '/api/users/currentUser',
         method: 'get',
         body: {},
-        onSuccess(data: UserDocs) {
-          setCurrentUser(data);
+        onSuccess({ currentUser }: { currentUser: UserDocs }) {
+          setCurrentUser(currentUser);
         }
        });
     }
   }, [])
 
-  console.log('status inside app', status);
   return (
     <Router>
       <Header />
         {status.loading && <Skeleton width={500} height={100} />}
         {!status.loading && (
           <Routes>
-            <Route path="/" element={!currentUser.id ? <Navigate to="/signup" /> : <DocsContainer />} />
+            <Route path="/" element={status.error? <Navigate to="/signup" /> : <DocsContainer />} />
             <Route path="/documents/:id" element={<TextEditor />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<Signup setCurrentUser={setCurrentUser} />} />
           </Routes>
         )}
     </Router>
