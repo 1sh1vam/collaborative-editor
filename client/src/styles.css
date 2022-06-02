@@ -201,7 +201,8 @@ body {
 .form {
     width: 450px;
     height: 350px;
-    margin: 200px auto;
+    margin: 150px auto;
+    margin-bottom: 0;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -243,4 +244,20 @@ body {
     color: #fff;
     font-weight: 400;
     cursor: pointer;
+}
+
+.form-error {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    height: fit-content;
+}
+
+.form-error-hidden {
+    display: none;
+}
+
+.error {
+    color: #FF0000;
+    font-size: 0.8rem;
 }
