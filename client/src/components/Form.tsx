@@ -1,7 +1,7 @@
 import React from "react";
 
 interface FunctionProps {
-    children: JSX.Element[];
+    children: JSX.Element[] ;
 }
 
 interface InputProps {
@@ -12,6 +12,7 @@ interface InputProps {
 }
 
 interface BtnProps {
+    loading?: boolean;
     children: string;
     onClick(e: React.SyntheticEvent): void;
 }
@@ -28,7 +29,7 @@ export const FormInput = ({ ...props }: InputProps) => {
     )
 }
 
-export const FormBtn = ({ children, ...props }: BtnProps) => {
+export const FormBtn = ({ loading, children, ...props }: BtnProps) => {
     return (
         <button {...props} className="form-btn">{children}</button>
     )
