@@ -28,7 +28,7 @@ export default function useRequest() {
     const sendRequest = async <Body, CallbackParams>({ apiRoute, from, method, body, onSuccess, onError } : Props<Body, CallbackParams>) => {
         try {
             setStauts({ loading: true, current: from });
-            const url = 'http://localhost:3001' + apiRoute;
+            const url = apiRoute;
             const response = await axios[method](url, body);
 
             if (onSuccess) onSuccess(response.data);
