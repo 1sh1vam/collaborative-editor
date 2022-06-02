@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserDocs } from '../App';
 import Form, { FormBtn, FormInput } from '../components/Form';
+import useRequest from '../hooks/use-request';
+
+interface Props {
+  setCurrentUser(data: UserDocs): void;
+}
 
 interface FormData {
   name: string;
@@ -8,11 +14,24 @@ interface FormData {
   password: string;
 }
 
-export default function Signup() {
+export default function Signup({ setCurrentUser }: Props) {
   const [form, setForm] = useState<FormData>({name: '', email: '', password: ''});
+  const { status, sendRequest } = useRequest();
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.SyntheticEvent) => {
       e.preventDefault();
+      sendRequest({
+        apiRoute: '/api/users/signup',
+        method: 'post',
+        body: {...form},
+        onSuccess(data: UserDocs) {
+          setCurrentUser(data);
+          navigate('/');
+        }
+      })
   }
+  console.log('status sign', status);
   return (
     <div className="signup-form form-container">
       <Form>
@@ -39,9 +58,10 @@ export default function Signup() {
           }
         />
         <div className='btn-container'>
-          <FormBtn onClick={handleSubmit}>submit</FormBtn>
+          <FormBtn loading={status.loading} onClick={handleSubmit}>submit</FormBtn>
           <Link to="/signin">sign in</Link>
         </div>
+        <p className={`${status.error ? 'form-error' : 'form-error-hidden'} error`}>{status.message}</p>
       </Form>
     </div>
   );
