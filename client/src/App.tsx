@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import useRequest from "./hooks/use-request";
 import Signup from "./containers/Signup";
 import Skeleton from "react-loading-skeleton";
+import SigIn from "./containers/Signin";
 
 export interface UserDocs {
   name: string;
@@ -40,6 +41,7 @@ function App() {
             <Route path="/" element={(status.error && !currentUser.id)? <Navigate to="/signup" /> : <DocsContainer />} />
             <Route path="/documents/:id" element={<TextEditor />} />
             <Route path="/signup" element={<Signup setCurrentUser={setCurrentUser} />} />
+            <Route path="/signin" element={<SigIn setCurrentUser={setCurrentUser} />} />
           </Routes>
         )}
     </Router>
