@@ -2,20 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import DocList from "../components/DocList";
 import { useNavigate } from "react-router-dom";
 import useRequest from "../hooks/use-request";
+import { Docs } from "../App";
 
 interface DocCreateData {
     id: string;
 }
 
-interface Docs {
-    id: string;
-    data: any;
-    owner: string;
-    name: string;
+interface Props {
+    docs: Docs[];
+    setDocs(param: Docs[]):void
 }
 
-const DocsContainer = () => {
-    const [docs, setDocs] = useState<Docs[]>([]);
+
+const DocsContainer = ({ docs, setDocs }: Props) => {
     const navigate = useNavigate();
     const { status, sendRequest } = useRequest();
     const mountedRef = useRef(false);
@@ -35,7 +34,7 @@ const DocsContainer = () => {
             navigate(`/documents/${data.id}`)
         } });
     }
-    console.log('status', status);
+
     return (
         <div  className="docs-container">
             <div className="docs-top">
@@ -51,7 +50,7 @@ const DocsContainer = () => {
                 <p className="doc-items-title">Documents</p>
                 <div className="doc-items">
                     {status.current === 'getDocs' && status.error && <p className="error-text">{status.message}</p>}
-                    {docs.map((doc) => <DocList onClick={() => navigate(`/documents/${doc.id}`)} name={doc.name} />)}
+                    {docs.map((doc) => <DocList onClick={() => navigate(`/documents/${doc.id}`, { state: { docId: doc.id } })} name={doc.name} />)}
                 </div>
             </div>
         </div>
