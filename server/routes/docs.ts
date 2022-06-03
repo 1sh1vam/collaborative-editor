@@ -12,6 +12,7 @@ app.post('/api/docs', currentUser, async (req: Request, res: Response) => {
     const { id } = req.currentUser;
 
     const editor = Editor.build({
+        name: 'Untitled',
         data: "",
         owner: id,
     });
