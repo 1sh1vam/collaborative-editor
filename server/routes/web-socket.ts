@@ -9,7 +9,7 @@ const handleSocket =  async (socket: Socket) => {
         if (!document) {
             socket.emit('error', { message: 'Document does not exist' })
         } else {
-            socket.emit('load-document', document!.data);
+            socket.emit('load-document', document);
         }
 
         socket.on('send-changes', async (delta: any) => {
