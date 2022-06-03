@@ -3,18 +3,10 @@ import { useLocation, useParams } from "react-router-dom";
 import { Docs } from "../App";
 import useRequest from "../hooks/use-request";
 
-interface State {
-    docId?: string;
-}
-
 const Header = ({ docs } : { docs: Docs[] }) => {
     const location = useLocation();
-    let doc;
-
-    if (location.state) {
-        const { docId: id } = location.state as State;
-        doc = docs.find((data) => data.id === id);
-    }
+    const path = location.pathname.split('/');
+    const doc = docs.find((data) => data.id === path[2]);
 
     return (
         <div className="header">
