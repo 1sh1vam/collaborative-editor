@@ -33,18 +33,20 @@ function App() {
   }, [])
 
   return (
+    <div>
     <Router>
       <Header />
         {status.loading && <Skeleton width={500} height={100} />}
-        {!status.loading && (
+        {(mountedRef.current && !status.loading) && (
           <Routes>
-            <Route path="/" element={(status.error && !currentUser.id)? <Navigate to="/signup" /> : <DocsContainer />} />
+            <Route path="/" element={!currentUser.id ? <Navigate to="/signup" /> : <DocsContainer />} />
             <Route path="/documents/:id" element={<TextEditor />} />
             <Route path="/signup" element={<Signup setCurrentUser={setCurrentUser} />} />
             <Route path="/signin" element={<SigIn setCurrentUser={setCurrentUser} />} />
           </Routes>
         )}
     </Router>
+    </div>
   );
 }
 
