@@ -30,7 +30,6 @@ export default function SigIn({ setCurrentUser }: Props) {
         }
       })
   }
-  console.log('status sign', status);
   return (
     <div className="signup-form form-container">
       <Form>

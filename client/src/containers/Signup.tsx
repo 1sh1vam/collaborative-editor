@@ -31,7 +31,6 @@ export default function Signup({ setCurrentUser }: Props) {
         }
       })
   }
-  console.log('status sign', status);
   return (
     <div className="signup-form form-container">
       <Form>
