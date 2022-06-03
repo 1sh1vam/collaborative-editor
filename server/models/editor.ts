@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 interface EditorAttrs {
+    name: string;
     data: any;
     owner: string;
 }
