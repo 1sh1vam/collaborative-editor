@@ -50,7 +50,7 @@ const DocsContainer = ({ docs, setDocs }: Props) => {
                 <p className="doc-items-title">Documents</p>
                 <div className="doc-items">
                     {status.current === 'getDocs' && status.error && <p className="error-text">{status.message}</p>}
-                    {docs.map((doc) => <DocList onClick={() => navigate(`/documents/${doc.id}`, { state: { docId: doc.id } })} name={doc.name} />)}
+                    {docs.map((doc) => <DocList onClick={() => navigate(`/documents/${doc.id}`)} name={doc.name} />)}
                 </div>
             </div>
         </div>
