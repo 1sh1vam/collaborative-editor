@@ -14,10 +14,19 @@ export interface UserDocs {
   id: string;
 }
 
+export interface Docs {
+  id: string;
+  data: any;
+  owner: string;
+  name: string;
+}
+
 function App() {
   const mountedRef = useRef(false);
+  const [docs, setDocs] = useState<Docs[]>([]);
   const [currentUser, setCurrentUser] = useState<UserDocs>({ name: '', email: '', id: '' })
   const { status, sendRequest } = useRequest();
+
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
@@ -30,17 +39,17 @@ function App() {
         }
        });
     }
-  }, [])
+  }, []);
 
   return (
     <div>
     <Router>
-      <Header />
+      <Header docs={docs} />
         {status.loading && <Skeleton width={500} height={100} />}
         {(mountedRef.current && !status.loading) && (
           <Routes>
-            <Route path="/" element={!currentUser.id ? <Navigate to="/signup" /> : <DocsContainer />} />
-            <Route path="/documents/:id" element={<TextEditor />} />
+            <Route path="/" element={!currentUser.id ? <Navigate to="/signup" /> : <DocsContainer docs={docs} setDocs={setDocs} />} />
+            <Route path="/documents/:id" element={<TextEditor setDocs={setDocs} />} />
             <Route path="/signup" element={<Signup setCurrentUser={setCurrentUser} />} />
             <Route path="/signin" element={<SigIn setCurrentUser={setCurrentUser} />} />
           </Routes>
