@@ -2,6 +2,9 @@ import { Socket } from "socket.io";
 import { Editor } from "../models/editor";
 
 const handleSocket =  async (socket: Socket) => {
+    if(!socket.request.headers.cookie) {
+        return socket.emit('error', { message: 'You are not logged in.' })
+    }
     console.log('connected');
     socket.on('get-document', async (documentId: string) => {
         const document = await find(documentId);
