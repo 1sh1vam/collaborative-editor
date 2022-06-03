@@ -3,7 +3,7 @@ import axios from 'axios';
 
 interface Props<Body, CallbackParams> {
     apiRoute: string;
-    method: 'get' | 'post';
+    method: 'get' | 'post' | 'patch';
     from?: string;
     body?: Body;
     onSuccess?: (params: CallbackParams) => void;
