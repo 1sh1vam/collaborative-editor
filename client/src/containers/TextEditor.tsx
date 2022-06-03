@@ -6,6 +6,7 @@ import 'quill/dist/quill.snow.css';
 import 'highlight.js/styles/monokai-sublime.css';
 import { io, Socket } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
+import { Docs } from '../App';
 
 var TOOLBAR_OPTIONS = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -35,7 +36,11 @@ interface MountedRef {
   quill?: boolean;
 }
 
-const TextEditor = () => {
+interface Props {
+  setDocs(params: Docs[]): void;
+}
+
+const TextEditor = ({ setDocs }: Props) => {
   const { id: documentId } = useParams();
   const [socket, setSocket] = useState<Socket>();
   const [quill, setQuill] = useState<Quill>();
@@ -54,8 +59,9 @@ const TextEditor = () => {
   useEffect(() => {
     if (!socket || !quill) return;
 
-    socket.once('load-document', (data) => {
-      quill.setContents(data);
+    socket.once('load-document', (doc) => {
+      setDocs([doc]);
+      quill.setContents(doc.data);
       quill.enable();
     });
 
